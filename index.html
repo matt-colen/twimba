@@ -1,9 +1,11 @@
 <html>
   <head>
+    <!-- Resets  -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css"
     />
+    <!-- Font Awesome CDN -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
@@ -11,31 +13,38 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
+    <!-- CSS -->
     <link rel="stylesheet" href="index.css" />
+    <!-- Scripts  -->
     <script src="index.js" type="module" defer></script>
   </head>
 
   <body>
     <header>
-      <h1>Twimba</h1>
+      <h1 class="title">Twimba</h1>
     </header>
     <main>
-      <section class="tweet-input">
+      <section id="tweet-input">
         <div class="tweet-input-area">
           <img
             src="images/scrimbalogo.png"
             class="profile-pic"
             alt="Your profile picture"
           />
-          <textarea placeholder="What's happening?" id="tweet-input"></textarea>
+          <textarea
+            id="tweet-textarea"
+            class="tweet-textarea"
+            placeholder="What's happening?"
+          ></textarea>
         </div>
-        <button id="tweet-btn">Tweet</button>
+        <button id="tweet-btn" class="btn">Tweet</button>
       </section>
 
       <section id="tweet-feed" class="tweet-feed"></section>

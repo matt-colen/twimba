@@ -1,134 +1,176 @@
+:root {
+  /* Colors */
+  --color-primary: hsl(204, 87%, 47%);
+  --color-primary-hover: hsl(204, 97%, 37%);
+  --color-secondary: #555;
+  --color-icon-default: #999;
+  --color-icon-liked: red;
+  --color-icon-retweeted: limegreen;
+  --color-tweet-border: lightgray;
+  /* Spacing  */
+  --spacing-xs: 4px;
+  --spacing-s: 10px;
+  --spacing-m: 15px;
+  --spacing-l: 20px;
+  --spacing-xl: 40px;
+  /* Font Size  */
+  --font-size-xxs: 12px;
+  --font-size-xs: 15px;
+  --font-size-s: 18px;
+  --font-size-m: 20px;
+  /* Radius  */
+  --radius-circle: 50%;
+  /* Transitions  */
+  --transition-quick: all 0.1s;
+}
+
+/* Utility */
+.hidden {
+  display: none;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
 html,
 body {
   margin: 0;
   padding: 0;
   font-family: "Roboto", sans-serif;
+  font-size: var(--font-size-s);
 }
 
-/* typography and icons */
-
-h1 {
-  color: #0f8cdf;
-  margin-bottom: 10px;
-  font-size: 20px;
+/* Typography & Icons */
+.title {
+  color: var(--color-primary);
+  margin: var(--spacing-m) 0 var(--spacing-s);
+  font-size: var(--font-size-m);
 }
 
-i {
-  font-size: 15px;
+.tweet-icon {
+  font-size: var(--font-size-s);
   cursor: pointer;
 }
 
 .fa-solid {
-  color: #999;
+  color: var(--color-icon-default);
 }
 
 .liked {
-  color: red;
+  color: var(--color-icon-liked);
 }
 
 .retweeted {
-  color: limegreen;
+  color: var(--color-icon-retweeted);
 }
 
 /* layout */
-
 main,
 header {
-  width: 290px;
+  max-width: 500px;
   margin: 0 auto;
 }
 
 header {
-  padding-bottom: 25px;
+  padding-bottom: var(--spacing-l);
 }
 
 .tweet-input-area {
   display: flex;
   align-items: flex-start;
-  gap: 10px;
+  gap: var(--spacing-s);
 }
 
-/* textareas + btn */
-
-textarea {
+/* Inputs & Btns */
+.tweet-textarea {
   border: none;
   resize: none;
-  padding: 10px;
-  margin: 0 0 20px 0;
-  height: 60px;
+  padding: var(--spacing-s);
+  margin: 0 0 var(--spacing-l) 0;
+  height: 80px;
   width: 100%;
-  font-size: 20px;
+  font-size: var(--font-size-m);
   line-height: 30px;
 }
 
-button {
-  background-color: #1da1f2;
+.btn {
+  background-color: var(--color-primary);
   border: none;
   color: white;
-  padding: 10px 19px;
-  border-radius: 20px;
-  width: 100%;
+  padding: var(--spacing-s) var(--spacing-xl);
+  border-radius: 100px;
   cursor: pointer;
-  font-size: 20px;
+  font-size: var(--font-size-m);
   font-weight: 600;
+  min-width: 160px;
+  transition: var(--transition-quick);
 }
 
-/* tweet */
+.btn:hover {
+  background: var(--color-primary-hover);
+}
 
+/* Tweet */
 .tweet {
-  border-top: 1px solid lightgray;
-  padding: 20px 0 0 0;
+  border-top: 1px solid var(--color-tweet-border);
+  padding: var(--spacing-l) 0 0 0;
   width: 100%;
-  margin: 15px 0;
+  margin: var(--spacing-m) 0;
 }
 
 .tweet-inner {
   display: flex;
   align-items: flex-start;
-  gap: 10px;
+  gap: var(--spacing-s);
 }
 
 .tweet-details {
   display: flex;
-  font-size: 13px;
-  justify-content: space-between;
-  width: 160px;
+  font-size: var(--font-size-xs);
+  justify-content: flex-start;
+  gap: var(--spacing-l);
 }
 
 .tweet-detail {
   display: flex;
-  gap: 4px;
+  gap: var(--spacing-xs);
 }
 
 .tweet-reply {
-  border-top: 1px solid lightgray;
-  padding: 20px 0 0 0px;
-  margin: 10px 0 10px 40px;
+  border-top: 1px solid var(--color-tweet-border);
+  padding: var(--spacing-l) 0 0 0px;
+  margin: var(--spacing-s) 0 var(--spacing-s) var(--spacing-xl);
   width: 80%;
 }
 
 .handle {
-  font-size: 12px;
+  font-size: var(--font-size-xxs);
   font-weight: 500;
-  color: #555;
+  color: var(--color-secondary);
   margin-top: 0;
 }
 
-.tweet-text {
-  width: 207px;
-  font-size: 14px;
-  line-height: 20px;
-}
-
-/* images */
-
+/* Images */
 .profile-pic {
-  border: 1px solid lightgray;
-  border-radius: 50%;
+  border: 1px solid var(--color-tweet-border);
+  border-radius: var(--radius-circle);
   width: 48px;
 }
 
-/* utility */
-.hidden {
-  display: none;
+/* Media Queries  */
+@media only screen and (max-width: 600px) {
+  header,
+  main {
+    margin: 0 var(--spacing-s);
+  }
+  .btn {
+    width: 100%;
+  }
 }

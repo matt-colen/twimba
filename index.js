@@ -46,7 +46,7 @@ function handleReplyClick(replyId) {
 }
 
 function handleTweetBtnClick() {
-  const tweetInput = document.getElementById("tweet-input");
+  const tweetInput = document.getElementById("tweet-textarea");
 
   if (tweetInput.value) {
     tweetsData.unshift({
@@ -108,19 +108,19 @@ function getFeedHtml() {
             <p class="tweet-text">${tweet.tweetText}</p>
             <div class="tweet-details">
                 <span class="tweet-detail">
-                    <i class="fa-regular fa-comment-dots"
+                    <i class="tweet-icon fa-regular fa-comment-dots"
                     data-reply="${tweet.uuid}"
                     ></i>
                     ${tweet.replies.length}
                 </span>
                 <span class="tweet-detail">
-                    <i class="fa-solid fa-heart ${likeIconClass}"
+                    <i class="tweet-icon fa-solid fa-heart ${likeIconClass}"
                     data-like="${tweet.uuid}"
                     ></i>
                     ${tweet.likes}
                 </span>
                 <span class="tweet-detail">
-                    <i class="fa-solid fa-retweet ${retweetIconClass}"
+                    <i class="tweet-icon fa-solid fa-retweet ${retweetIconClass}"
                     data-retweet="${tweet.uuid}"
                     ></i>
                     ${tweet.retweets}
