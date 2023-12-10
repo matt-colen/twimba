@@ -143,7 +143,8 @@ const handleLikeClick = async (tweetId) => {
         tweetData.likes--;
         const index = retweetedUsersArray.indexOf(currentUser);
         retweetedUsersArray.splice(index, 1);
-        if (retweetedUsersArray.length > 1) {
+        if (retweetedUsersArray.length >= 1) {
+          console.log(retweetedUsersArray)
           tweetData.likedBy = retweetedUsersArray;
         } else {
           tweetData.likedBy = JSON.stringify([]);
