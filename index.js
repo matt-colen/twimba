@@ -1,4 +1,3 @@
-import { tweetsData } from "./data.js";
 import { v4 as uuidv4 } from "https://jspm.dev/uuid";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import {
@@ -6,63 +5,42 @@ import {
   ref,
   push,
   onValue,
+  get,
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-// Firebase Realtime DB setup
+// Firebase setup
 const appSettings = {
   databaseURL: "https://twimba-f025b-default-rtdb.firebaseio.com/",
 };
 const app = initializeApp(appSettings);
 const database = getDatabase(app);
-const tweetsInDB = ref(database, "tweets");
+const tweetsRef = ref(database, "tweets");
 
-onValue(tweetsInDB, (snapshot) => {
-  if (snapshot.exists()) {
+// Runs on changes to Firebase DB "tweets" ref
+onValue(tweetsRef, (snapshot) => {
+  if (snapshot.exists) {
     render(snapshot.val());
   }
 });
 
-const render = (snap) => {
-  document.getElementById("tweet-feed").innerHTML = getFeedHtml(snap);
+const render = (data) => {
+  const feed = document.getElementById("tweet-feed");
+  data
+    ? (feed.innerHTML = getFeedHTML(data))
+    : (feed.innerHTML = `<p>No posts yet 😎</p>`);
 };
 
-const getFeedHtml = (snapshot) => {
-  const entries = Object.values(snapshot);
-  let feedHtml = ``;
+const getFeedHTML = (jsonData) => {
+  const tweets = Object.values(jsonData);
+  let feedHTML = ``;
 
-  entries.forEach((tweet) => {
-    const replies = JSON.parse(tweet.replies)
-    let likeIconClass = "";
-    
-    if (tweet.isLiked) {
-      likeIconClass = "liked";
-    }
-    
-    let retweetIconClass = "";
-    
-    if (tweet.isRetweeted) {
-      retweetIconClass = "retweeted";
-    }
-    
-    let repliesHtml = "";
-    
-    if (replies > 0) {
-      tweet.replies.forEach((reply) => {
-        repliesHtml += `
-        <div class="tweet-reply">
-            <div class="tweet-inner">
-                <img src="${reply.profilePic}" class="profile-pic">
-                    <div>
-                        <p class="handle">${reply.handle}</p>
-                        <p class="tweet-text">${reply.tweetText}</p>
-                    </div>
-                </div>
-        </div>
-        `;
-      });
-    }
+  tweets.forEach((tweet) => {
+    const replies = JSON.parse(tweet.replies);
+    let likeIconClass = handleLikeStyles(tweet);
+    let retweetIconClass = handleRetweetStyles(tweet);
+    let repliesHTML = getRepliesHTML(tweet, replies);
 
-    feedHtml += `
+    feedHTML += `
     <div class="tweet">
         <div class="tweet-inner">
             <img src="${tweet.profilePic}" class="profile-pic">
@@ -92,13 +70,39 @@ const getFeedHtml = (snapshot) => {
             </div>
         </div>
         <div class="hidden" id="replies-${tweet.uuid}">
-            ${repliesHtml}
+            ${repliesHTML}
         </div>
     </div>
     `;
   });
-  return feedHtml;
+  return feedHTML;
 };
+
+const getRepliesHTML = (tweet, replies) => {
+  let repliesHTML = "";
+
+  if (replies > 0) {
+    tweet.replies.forEach((reply) => {
+      repliesHTML += `
+      <div class="tweet-reply">
+        <div class="tweet-inner">
+          <img src="${reply.profilePic}" class="profile-pic">
+          <div>
+            <p class="handle">${reply.handle}</p>
+            <p class="tweet-text">${reply.tweetText}</p>
+          </div>
+        </div>
+      </div>
+      `;
+    });
+  }
+
+  return repliesHTML;
+};
+
+const handleLikeStyles = (tweet) => (tweet.isLiked ? "liked" : "");
+
+const handleRetweetStyles = (tweet) => (tweet.isRetweeted ? "retweeted" : "");
 
 document.addEventListener("click", (e) => {
   if (e.target.dataset.like) {
@@ -147,7 +151,7 @@ const handleTweetBtnClick = () => {
   const tweetInput = document.getElementById("tweet-textarea");
 
   if (tweetInput.value) {
-    push(tweetsInDB, {
+    push(tweetsRef, {
       handle: `@Scrimba`,
       profilePic: `images/scrimbalogo.png`,
       likes: 0,

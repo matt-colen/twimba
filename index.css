@@ -88,6 +88,10 @@ header {
   gap: var(--spacing-s);
 }
 
+.tweet-feed {
+  margin-top: var(--spacing-xl);
+}
+
 /* Inputs & Btns */
 .tweet-textarea {
   border: none;
