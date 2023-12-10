@@ -131,21 +131,20 @@ const handleLikeClick = async (tweetId) => {
 
     if (snapshot.exists()) {
       const tweetData = snapshot.val();
-      const retweetedUsersArray = JSON.parse(tweetData.likedBy);
+      const likedUsersArray = JSON.parse(tweetData.likedBy);
 
-      if (!retweetedUsersArray.includes(currentUser)) {
+      if (!likedUsersArray.includes(currentUser)) {
         tweetData.likes++;
-        retweetedUsersArray.push(currentUser);
-        tweetData.likedBy = JSON.stringify(retweetedUsersArray);
+        likedUsersArray.push(currentUser);
+        tweetData.likedBy = JSON.stringify(likedUsersArray);
 
         await set(tweetRef, tweetData);
       } else {
         tweetData.likes--;
-        const index = retweetedUsersArray.indexOf(currentUser);
-        retweetedUsersArray.splice(index, 1);
-        if (retweetedUsersArray.length >= 1) {
-          console.log(retweetedUsersArray)
-          tweetData.likedBy = retweetedUsersArray;
+        const index = likedUsersArray.indexOf(currentUser);
+        likedUsersArray.splice(index, 1);
+        if (likedUsersArray.length >= 1) {
+          tweetData.likedBy = likedUsersArray;
         } else {
           tweetData.likedBy = JSON.stringify([]);
         }
