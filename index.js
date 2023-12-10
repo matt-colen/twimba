@@ -6,6 +6,7 @@ import {
   push,
   onValue,
   get,
+  set,
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 // Firebase setup
@@ -31,45 +32,46 @@ const render = (data) => {
 };
 
 const getFeedHTML = (jsonData) => {
-  const tweets = Object.values(jsonData);
+  const tweets = Object.entries(jsonData);
   let feedHTML = ``;
 
   tweets.forEach((tweet) => {
-    const replies = JSON.parse(tweet.replies);
-    let likeIconClass = handleLikeStyles(tweet);
-    let retweetIconClass = handleRetweetStyles(tweet);
-    let repliesHTML = getRepliesHTML(tweet, replies);
+    const tweetVal = tweet[1];
+    const replies = JSON.parse(tweetVal.replies);
+    let likeIconClass = handleLikeStyles(tweetVal);
+    let retweetIconClass = handleRetweetStyles(tweetVal);
+    let repliesHTML = getRepliesHTML(tweetVal, replies);
 
     feedHTML += `
     <div class="tweet">
         <div class="tweet-inner">
-            <img src="${tweet.profilePic}" class="profile-pic">
+            <img src="${tweetVal.profilePic}" class="profile-pic">
             <div>
-                <p class="handle">${tweet.handle}</p>
-                <p class="tweet-text">${tweet.tweetText}</p>
+                <p class="handle">${tweetVal.handle}</p>
+                <p class="tweet-text">${tweetVal.tweetText}</p>
                 <div class="tweet-details">
                     <span class="tweet-detail">
                         <i class="tweet-icon fa-regular fa-comment-dots"
-                        data-reply="${tweet.uuid}"
+                        data-reply="${tweet[0]}"
                         ></i>
                         ${replies.length}
                     </span>
                     <span class="tweet-detail">
                         <i class="tweet-icon fa-solid fa-heart ${likeIconClass}"
-                        data-like="${tweet.uuid}"
+                        data-like="${tweet[0]}"
                         ></i>
-                        ${tweet.likes}
+                        ${tweetVal.likes}
                     </span>
                     <span class="tweet-detail">
                         <i class="tweet-icon fa-solid fa-retweet ${retweetIconClass}"
-                        data-retweet="${tweet.uuid}"
+                        data-retweet="${tweet[0]}"
                         ></i>
-                        ${tweet.retweets}
+                        ${tweetVal.retweets}
                     </span>
                 </div>
             </div>
         </div>
-        <div class="hidden" id="replies-${tweet.uuid}">
+        <div class="hidden" id="replies-${tweet[0]}">
             ${repliesHTML}
         </div>
     </div>
@@ -116,32 +118,74 @@ document.addEventListener("click", (e) => {
   }
 });
 
-const handleLikeClick = (tweetId) => {
-  const targetTweetObj = tweetsData.filter(
-    (tweet) => tweet.uuid === tweetId
-  )[0];
+const handleLikeClick = async (tweetId) => {
+  const tweetRef = ref(database, `tweets/${tweetId}`);
+  const currentUser = localStorage.getItem("user-id");
 
-  if (targetTweetObj.isLiked) {
-    targetTweetObj.likes--;
-  } else {
-    targetTweetObj.likes++;
+  try {
+    const snapshot = await get(tweetRef);
+
+    if (snapshot.exists()) {
+      const tweetData = snapshot.val();
+      const retweetedUsersArray = JSON.parse(tweetData.likedBy);
+
+      if (!retweetedUsersArray.includes(currentUser)) {
+        tweetData.likes++;
+        retweetedUsersArray.push(currentUser);
+        tweetData.likedBy = JSON.stringify(retweetedUsersArray);
+
+        await set(tweetRef, tweetData);
+      } else {
+        tweetData.likes--;
+        const index = retweetedUsersArray.indexOf(currentUser);
+        retweetedUsersArray.splice(index, 1);
+        if (retweetedUsersArray.length > 1) {
+          tweetData.likedBy = retweetedUsersArray;
+        } else {
+          tweetData.likedBy = JSON.stringify([]);
+        }
+
+        await set(tweetRef, tweetData);
+      }
+    }
+  } catch (error) {
+    console.error("Error updating like: ", error);
   }
-  targetTweetObj.isLiked = !targetTweetObj.isLiked;
-  render();
 };
 
-const handleRetweetClick = (tweetId) => {
-  const targetTweetObj = tweetsData.filter(
-    (tweet) => tweet.uuid === tweetId
-  )[0];
+const handleRetweetClick = async (tweetId) => {
+  const tweetRef = ref(database, `tweets/${tweetId}`);
+  const currentUser = localStorage.getItem("user-id");
 
-  if (targetTweetObj.isRetweeted) {
-    targetTweetObj.retweets--;
-  } else {
-    targetTweetObj.retweets++;
+  try {
+    const snapshot = await get(tweetRef);
+
+    if (snapshot.exists()) {
+      const tweetData = snapshot.val();
+      const retweetedUsersArray = JSON.parse(tweetData.retweetedBy);
+
+      if (!retweetedUsersArray.includes(currentUser)) {
+        tweetData.retweets++;
+        retweetedUsersArray.push(currentUser);
+        tweetData.retweetedBy = JSON.stringify(retweetedUsersArray);
+
+        await set(tweetRef, tweetData);
+      } else {
+        tweetData.retweets--;
+        const index = retweetedUsersArray.indexOf(currentUser);
+        retweetedUsersArray.splice(index, 1);
+        if (retweetedUsersArray.length > 1) {
+          tweetData.retweetedBy = retweetedUsersArray;
+        } else {
+          tweetData.retweetedBy = JSON.stringify([]);
+        }
+
+        await set(tweetRef, tweetData);
+      }
+    }
+  } catch (error) {
+    console.error("Error updating like: ", error);
   }
-  targetTweetObj.isRetweeted = !targetTweetObj.isRetweeted;
-  render();
 };
 
 const handleReplyClick = (replyId) =>
@@ -158,10 +202,17 @@ const handleTweetBtnClick = () => {
       retweets: 0,
       tweetText: tweetInput.value,
       replies: JSON.stringify([]),
-      isLiked: false,
-      isRetweeted: false,
-      uuid: uuidv4(),
+      likedBy: JSON.stringify([]),
+      retweetedBy: JSON.stringify([]),
     });
     tweetInput.value = "";
   }
 };
+
+const createUserID = () => {
+  localStorage.setItem("user-id", `${uuidv4()}`);
+};
+
+if (!localStorage.getItem("user-id")) {
+  createUserID();
+}
