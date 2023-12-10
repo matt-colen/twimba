@@ -38,9 +38,13 @@ const getFeedHTML = (jsonData) => {
   tweets.forEach((tweet) => {
     const tweetVal = tweet[1];
     const replies = JSON.parse(tweetVal.replies);
-    let likeIconClass = handleLikeStyles(tweetVal);
-    let retweetIconClass = handleRetweetStyles(tweetVal);
     let repliesHTML = getRepliesHTML(tweetVal, replies);
+    const isLiked = JSON.parse(
+      tweetVal.likedBy.includes(localStorage.getItem("user-id"))
+    );
+    const isRetweeted = JSON.parse(
+      tweetVal.retweetedBy.includes(localStorage.getItem("user-id"))
+    );
 
     feedHTML += `
     <div class="tweet">
@@ -57,13 +61,17 @@ const getFeedHTML = (jsonData) => {
                         ${replies.length}
                     </span>
                     <span class="tweet-detail">
-                        <i class="tweet-icon fa-solid fa-heart ${likeIconClass}"
+                        <i class="tweet-icon fa-solid fa-heart ${
+                          isLiked ? "liked" : ""
+                        }"
                         data-like="${tweet[0]}"
                         ></i>
                         ${tweetVal.likes}
                     </span>
                     <span class="tweet-detail">
-                        <i class="tweet-icon fa-solid fa-retweet ${retweetIconClass}"
+                        <i class="tweet-icon fa-solid fa-retweet ${
+                          isRetweeted ? "retweeted" : ""
+                        }"
                         data-retweet="${tweet[0]}"
                         ></i>
                         ${tweetVal.retweets}
@@ -101,10 +109,6 @@ const getRepliesHTML = (tweet, replies) => {
 
   return repliesHTML;
 };
-
-const handleLikeStyles = (tweet) => (tweet.isLiked ? "liked" : "");
-
-const handleRetweetStyles = (tweet) => (tweet.isRetweeted ? "retweeted" : "");
 
 document.addEventListener("click", (e) => {
   if (e.target.dataset.like) {
