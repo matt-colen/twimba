@@ -177,4 +177,11 @@ header {
   .btn {
     width: 100%;
   }
+  .tweet-icon, .tweet-detail {
+    font-size: 22px;
+  }
+  .tweet-detail {
+    display: flex;
+    align-items: center;
+  }
 }
