@@ -32,7 +32,7 @@ const render = (data) => {
 };
 
 const getFeedHTML = (jsonData) => {
-  const tweets = Object.entries(jsonData);
+  let tweets = Object.entries(jsonData).reverse()
   let feedHTML = ``;
 
   tweets.forEach((tweet) => {
