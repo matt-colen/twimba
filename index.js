@@ -126,34 +126,34 @@ const handleLikeClick = async (tweetId) => {
   const tweetRef = ref(database, `tweets/${tweetId}`);
   const currentUser = localStorage.getItem("user-id");
 
-  try {
-    const snapshot = await get(tweetRef);
+  const snapshot = await get(tweetRef);
 
-    if (snapshot.exists()) {
-      const tweetData = snapshot.val();
-      const likedUsersArray = JSON.parse(tweetData.likedBy);
+  if (snapshot.exists()) {
+    const data = snapshot.val();
+    let likedByArray = [];
 
-      if (!likedUsersArray.includes(currentUser)) {
-        tweetData.likes++;
-        likedUsersArray.push(currentUser);
-        tweetData.likedBy = JSON.stringify(likedUsersArray);
-
-        await set(tweetRef, tweetData);
-      } else {
-        tweetData.likes--;
-        const index = likedUsersArray.indexOf(currentUser);
-        likedUsersArray.splice(index, 1);
-        if (likedUsersArray.length >= 1) {
-          tweetData.likedBy = likedUsersArray;
-        } else {
-          tweetData.likedBy = JSON.stringify([]);
+    if (data.likedBy) {
+      try {
+        likedByArray = JSON.parse(data.likedBy);
+        if (!Array.isArray(likedByArray)) {
+          throw new Error("likedBy data is not an array");
         }
-
-        await set(tweetRef, tweetData);
+      } catch (parseError) {
+        console.log("Error parsing likedBy data: ", parseError);
+        likedByArray = [];
       }
     }
-  } catch (error) {
-    console.error("Error updating like: ", error);
+
+    if (!likedByArray.includes(currentUser)) {
+      likedByArray.push(currentUser);
+    } else {
+      const index = likedByArray.indexOf(currentUser);
+      likedByArray.splice(index, 1);
+    }
+
+    data.likes = likedByArray.length;
+    data.likedBy = JSON.stringify(likedByArray);
+    await set(tweetRef, data);
   }
 };
 
@@ -161,34 +161,34 @@ const handleRetweetClick = async (tweetId) => {
   const tweetRef = ref(database, `tweets/${tweetId}`);
   const currentUser = localStorage.getItem("user-id");
 
-  try {
-    const snapshot = await get(tweetRef);
+  const snapshot = await get(tweetRef);
 
-    if (snapshot.exists()) {
-      const tweetData = snapshot.val();
-      const retweetedUsersArray = JSON.parse(tweetData.retweetedBy);
+  if (snapshot.exists()) {
+    const data = snapshot.val();
+    let retweetedByArray = [];
 
-      if (!retweetedUsersArray.includes(currentUser)) {
-        tweetData.retweets++;
-        retweetedUsersArray.push(currentUser);
-        tweetData.retweetedBy = JSON.stringify(retweetedUsersArray);
-
-        await set(tweetRef, tweetData);
-      } else {
-        tweetData.retweets--;
-        const index = retweetedUsersArray.indexOf(currentUser);
-        retweetedUsersArray.splice(index, 1);
-        if (retweetedUsersArray.length > 1) {
-          tweetData.retweetedBy = retweetedUsersArray;
-        } else {
-          tweetData.retweetedBy = JSON.stringify([]);
+    if (data.retweetedBy) {
+      try {
+        retweetedByArray = JSON.parse(data.retweetedBy);
+        if (!Array.isArray(retweetedByArray)) {
+          throw new Error("retweetedBy data is not an array");
         }
-
-        await set(tweetRef, tweetData);
+      } catch (parseError) {
+        console.log("Error parsing retweetedBy data: ", parseError);
+        retweetedByArray = [];
       }
     }
-  } catch (error) {
-    console.error("Error updating like: ", error);
+
+    if (!retweetedByArray.includes(currentUser)) {
+      retweetedByArray.push(currentUser);
+    } else {
+      const index = retweetedByArray.indexOf(currentUser);
+      retweetedByArray.splice(index, 1);
+    }
+
+    data.retweets = retweetedByArray.length;
+    data.retweetedBy = JSON.stringify(retweetedByArray);
+    await set(tweetRef, data);
   }
 };
 
