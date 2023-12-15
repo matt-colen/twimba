@@ -8,7 +8,7 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css"
     />
-    <!-- Font Awesome -->
+    <!-- Font Awesome CDN -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
@@ -33,14 +33,13 @@
     <header>
       <h1 class="title">Twimba</h1>
     </header>
-
     <main>
       <section id="tweet-input">
-        <div class="tweet-input__container">
+        <div class="tweet-input-area">
           <img
             src="images/scrimbalogo.png"
             class="profile-pic"
-            alt="Srimba profile picture"
+            alt="Your profile picture"
           />
           <textarea
             id="tweet-textarea"
@@ -51,9 +50,7 @@
         <button id="tweet-btn" class="btn">Tweet</button>
       </section>
 
-      <section id="tweet-feed" class="tweet-feed">
-        <!-- This is where the tweet data from Firebase gets rendered -->
-      </section>
+      <section id="tweet-feed" class="tweet-feed"></section>
     </main>
   </body>
 </html>
