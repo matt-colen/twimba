@@ -32,7 +32,7 @@ const render = (data) => {
 };
 
 const getFeedHTML = (jsonData) => {
-  let tweets = Object.entries(jsonData).reverse()
+  let tweets = Object.entries(jsonData).reverse();
   let feedHTML = ``;
 
   tweets.forEach((tweet) => {
@@ -47,40 +47,49 @@ const getFeedHTML = (jsonData) => {
     );
 
     feedHTML += `
-    <div class="tweet">
-        <div class="tweet-inner">
-            <img src="${tweetVal.profilePic}" class="profile-pic">
-            <div>
-                <p class="handle">${tweetVal.handle}</p>
-                <p class="tweet-text">${tweetVal.tweetText}</p>
-                <div class="tweet-details">
-                    <span class="tweet-detail">
-                        <i class="tweet-icon fa-regular fa-comment-dots"
-                        data-reply="${tweet[0]}"
-                        ></i>
-                        ${replies.length}
-                    </span>
-                    <span class="tweet-detail">
-                        <i class="tweet-icon fa-solid fa-heart ${
-                          isLiked ? "liked" : ""
-                        }"
-                        data-like="${tweet[0]}"
-                        ></i>
-                        ${tweetVal.likes}
-                    </span>
-                    <span class="tweet-detail">
-                        <i class="tweet-icon fa-solid fa-retweet ${
-                          isRetweeted ? "retweeted" : ""
-                        }"
-                        data-retweet="${tweet[0]}"
-                        ></i>
-                        ${tweetVal.retweets}
-                    </span>
-                </div>
+    <div class="tweet" id="${tweet[0]}">
+      <div class="tweet-inner">
+        <img src="${tweetVal.profilePic}" class="profile-pic">
+        <div>
+            <p class="handle">${tweetVal.handle}</p>
+            <p class="tweet-text">${tweetVal.tweetText}</p>
+            <div class="tweet-details">
+              <span class="tweet-detail">
+                <i class="tweet-icon fa-regular fa-comment-dots"
+                data-reply="${tweet[0]}"
+                ></i>
+                ${replies.length}
+              </span>
+              <span class="tweet-detail">
+                <i class="tweet-icon fa-solid fa-heart ${
+                  isLiked ? "liked" : ""
+                }"
+                data-like="${tweet[0]}"
+                ></i>
+                ${tweetVal.likes}
+              </span>
+              <span class="tweet-detail">
+                <i class="tweet-icon fa-solid fa-retweet ${
+                  isRetweeted ? "retweeted" : ""
+                }"
+                data-retweet="${tweet[0]}"
+                ></i>
+                ${tweetVal.retweets}
+              </span>
             </div>
+          </div>
         </div>
-        <div class="hidden" id="replies-${tweet[0]}">
-            ${repliesHTML}
+        <div class="hidden reply__container" id="replies-${tweet[0]}">
+          
+          <div class="reply-input__container">
+            <textarea class="reply-text" type="text" placeholder="Add a reply"></textarea>
+            <button id="reply-btn" class="btn" data-reply-btn="${
+              tweet[0]
+            }">Reply</button>
+          </div>
+
+          ${repliesHTML}
+
         </div>
     </div>
     `;
@@ -91,8 +100,8 @@ const getFeedHTML = (jsonData) => {
 const getRepliesHTML = (tweet, replies) => {
   let repliesHTML = "";
 
-  if (replies > 0) {
-    tweet.replies.forEach((reply) => {
+  if (replies.length > 0) {
+    replies.forEach((reply) => {
       repliesHTML += `
       <div class="tweet-reply">
         <div class="tweet-inner">
@@ -119,8 +128,43 @@ document.addEventListener("click", (e) => {
     handleReplyClick(e.target.dataset.reply);
   } else if (e.target.id === "tweet-btn") {
     handleTweetBtnClick();
+  } else if (e.target.dataset.replyBtn) {
+    handleReplyBtnClick(e.target.dataset.replyBtn);
   }
 });
+
+const handleReplyBtnClick = async (tweetId) => {
+  const tweetRef = ref(database, `tweets/${tweetId}`);
+  const snapshot = await get(tweetRef);
+  const replyText = document.querySelector(`#${tweetId} textarea`).value;
+
+  if (replyText) {
+    const replyObj = {
+      handle: `@ScrimbaStudent`,
+      profilePic: `images/scrimbalogo.png`,
+      tweetText: replyText,
+    };
+
+    if (snapshot.exists()) {
+      const data = snapshot.val();
+      let repliesArray = [];
+
+      if (data.replies) {
+        try {
+          repliesArray = JSON.parse(data.replies);
+        } catch (e) {
+          console.error("Error parsing replies data", e);
+          repliesArray = [];
+        }
+      }
+
+      repliesArray.push(replyObj);
+      repliesArray = repliesArray.reverse();
+      data.replies = JSON.stringify(repliesArray);
+      await set(tweetRef, data);
+    }
+  }
+};
 
 const handleLikeClick = async (tweetId) => {
   const tweetRef = ref(database, `tweets/${tweetId}`);
@@ -135,9 +179,6 @@ const handleLikeClick = async (tweetId) => {
     if (data.likedBy) {
       try {
         likedByArray = JSON.parse(data.likedBy);
-        if (!Array.isArray(likedByArray)) {
-          throw new Error("likedBy data is not an array");
-        }
       } catch (parseError) {
         console.log("Error parsing likedBy data: ", parseError);
         likedByArray = [];
@@ -170,9 +211,6 @@ const handleRetweetClick = async (tweetId) => {
     if (data.retweetedBy) {
       try {
         retweetedByArray = JSON.parse(data.retweetedBy);
-        if (!Array.isArray(retweetedByArray)) {
-          throw new Error("retweetedBy data is not an array");
-        }
       } catch (parseError) {
         console.log("Error parsing retweetedBy data: ", parseError);
         retweetedByArray = [];
@@ -200,7 +238,7 @@ const handleTweetBtnClick = () => {
 
   if (tweetInput.value) {
     push(tweetsRef, {
-      handle: `@Scrimba`,
+      handle: `@ScrimbaStudent`,
       profilePic: `images/scrimbalogo.png`,
       likes: 0,
       retweets: 0,
