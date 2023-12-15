@@ -3,12 +3,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Twimba</title>
-    <!-- Resets  -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css"
     />
-    <!-- Font Awesome CDN -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
@@ -16,16 +14,13 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
-    <!-- CSS -->
     <link rel="stylesheet" href="index.css" />
-    <!-- Scripts  -->
     <script src="index.js" type="module" defer></script>
   </head>
 
@@ -33,13 +28,14 @@
     <header>
       <h1 class="title">Twimba</h1>
     </header>
+
     <main>
       <section id="tweet-input">
-        <div class="tweet-input-area">
+        <div class="tweet-input__container">
           <img
             src="images/scrimbalogo.png"
             class="profile-pic"
-            alt="Your profile picture"
+            alt="User profile picture"
           />
           <textarea
             id="tweet-textarea"

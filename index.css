@@ -82,7 +82,7 @@ header {
   padding-bottom: var(--spacing-l);
 }
 
-.tweet-input-area {
+.tweet-input__container {
   display: flex;
   align-items: flex-start;
   gap: var(--spacing-s);
