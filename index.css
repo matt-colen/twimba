@@ -18,6 +18,7 @@
   --font-size-xs: 15px;
   --font-size-s: 18px;
   --font-size-m: 20px;
+  --font-size-l: 28px;
   /* Radius  */
   --radius-circle: 50%;
   /* Transitions  */
@@ -27,6 +28,10 @@
 /* Utility */
 .hidden {
   display: none;
+}
+
+.flex {
+  display: flex;
 }
 
 html {
@@ -39,19 +44,17 @@ html {
   box-sizing: inherit;
 }
 
-html,
 body {
   margin: 0;
-  padding: 0;
   font-family: "Roboto", sans-serif;
   font-size: var(--font-size-m);
 }
 
 /* Typography & Icons */
 .title {
+  margin: var(--spacing-l) 0;
+  font-size: var(--font-size-l);
   color: var(--color-primary);
-  margin: var(--spacing-m) 0 var(--spacing-s);
-  font-size: var(--font-size-m);
 }
 
 .tweet-icon {
@@ -82,17 +85,21 @@ header {
   padding-bottom: var(--spacing-l);
 }
 
+/* Tweet input section  */
 .tweet-input__container {
-  display: flex;
   align-items: flex-start;
   gap: var(--spacing-s);
 }
 
+/* Tweet feed section  */
 .tweet-feed {
-  margin-top: var(--spacing-xl);
+  margin: var(--spacing-xl) 0;
 }
 
-/* Inputs & Btns */
+.reply-input__container {
+  margin: var(--spacing-l) 0 0 var(--spacing-xl);
+}
+
 .tweet-textarea,
 .reply-text {
   border: none;
@@ -101,13 +108,12 @@ header {
   margin: 0 0 var(--spacing-l) 0;
   height: 100px;
   width: 100%;
-  font-size: var(--font-size-m);
   line-height: 30px;
 }
 
-.reply-input__container {
-  border-top: 1px solid var(--color-tweet-border);
-  margin: 40px 0 20px 40px;
+.reply-text {
+  border: 1px solid var(--color-tweet-border);
+  border-radius: 4px;
 }
 
 .btn {
@@ -130,9 +136,9 @@ header {
 /* Tweet */
 .tweet {
   border-top: 1px solid var(--color-tweet-border);
-  padding: var(--spacing-l) 0 0 0;
+  padding: var(--spacing-m) 0;
   width: 100%;
-  margin: var(--spacing-m) 0;
+  margin: 0;
 }
 
 .tweet-inner {
