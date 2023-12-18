@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from "https://jspm.dev/uuid";
 import {
   ref,
   push,
@@ -153,7 +152,7 @@ const handleReplyBtnClick = async (tweetId) => {
   if (replyText) {
     const replyObj = {
       handle: `@ScrimbaStudent`,
-      profilePic: `images/scrimbalogo.png`,
+      profilePic: `../images/scrimbalogo.png`,
       tweetText: replyText,
     };
 
@@ -180,7 +179,7 @@ const handleReplyBtnClick = async (tweetId) => {
 
 const handleLikeClick = async (tweetId) => {
   const tweetRef = ref(database, `tweets/${tweetId}`);
-  const currentUser = localStorage.getItem("user-id");
+  const currentUser = auth.currentUser.uid;
 
   const snapshot = await get(tweetRef);
 
@@ -212,7 +211,7 @@ const handleLikeClick = async (tweetId) => {
 
 const handleRetweetClick = async (tweetId) => {
   const tweetRef = ref(database, `tweets/${tweetId}`);
-  const currentUser = localStorage.getItem("user-id");
+  const currentUser = auth.currentUser.uid;
 
   const snapshot = await get(tweetRef);
 
@@ -258,15 +257,8 @@ const handleTweetBtnClick = () => {
       replies: JSON.stringify([]),
       likedBy: JSON.stringify([]),
       retweetedBy: JSON.stringify([]),
+      createdBy: `${auth.currentUser.uid}`,
     });
     tweetInput.value = "";
   }
 };
-
-const createUserID = () => {
-  localStorage.setItem("user-id", `${uuidv4()}`);
-};
-
-if (!localStorage.getItem("user-id")) {
-  createUserID();
-}
