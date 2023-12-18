@@ -83,6 +83,8 @@ header {
 
 header {
   padding-bottom: var(--spacing-l);
+  align-items: center;
+  justify-content: space-between;
 }
 
 /* Tweet input section  */
@@ -117,20 +119,34 @@ header {
 }
 
 .btn {
-  background-color: var(--color-primary);
-  border: none;
-  color: white;
-  padding: var(--spacing-s) var(--spacing-xl);
+  background: none;
   border-radius: 100px;
-  cursor: pointer;
-  font-size: var(--font-size-m);
+  padding: var(--spacing-s);
+  border: none;
   font-weight: 600;
-  min-width: 160px;
+  cursor: pointer;
   transition: var(--transition-quick);
 }
 
-.btn:hover {
+.btn--primary {
+  color: white;
+  background-color: var(--color-primary);
+  padding: var(--spacing-s) var(--spacing-xl);
+  font-size: var(--font-size-m);
+  min-width: 160px;
+}
+
+.btn--primary:hover {
   background: var(--color-primary-hover);
+}
+
+.btn--secondary {
+  font-size: var(--font-size-s);
+  max-width: 100px;
+}
+
+.btn--secondary:hover {
+  background: var(--color-tweet-border);
 }
 
 /* Tweet */

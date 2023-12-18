@@ -92,7 +92,7 @@ const getFeedHTML = (jsonData) => {
           
           <div class="reply-input__container">
             <textarea class="reply-text" type="text" placeholder="Add a reply"></textarea>
-            <button id="reply-btn" class="btn" data-reply-btn="${
+            <button id="reply-btn" class="btn btn--primary" data-reply-btn="${
               tweet[0]
             }">Reply</button>
           </div>
