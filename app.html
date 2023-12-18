@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Twimba - Authentication</title>
+    <title>Twimba</title>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css"
@@ -22,42 +22,33 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles/app.css" />
-    <link rel="stylesheet" href="styles/index.css" />
-    <script src="scripts/index.js" type="module" defer></script>
+    <script src="scripts/app.js" type="module" defer></script>
   </head>
 
   <body>
     <header>
-      <h1 class="title">Twimba</h1>
+      <h1 class="title">Welcome to Twimba</h1>
     </header>
 
     <main>
-      <section id="register">
-        <h2>Register</h2>
-        <form id="registerForm">
-          <input type="email" id="registerEmail" placeholder="Email" required />
-          <input
-            type="password"
-            id="registerPassword"
-            placeholder="Password"
-            required
+      <section id="tweet-input">
+        <div class="tweet-input__container flex">
+          <img
+            src="images/scrimbalogo.png"
+            class="profile-pic"
+            alt="Srimba profile picture"
           />
-          <button type="submit">Register</button>
-        </form>
+          <textarea
+            id="tweet-textarea"
+            class="tweet-textarea"
+            placeholder="What's happening?"
+          ></textarea>
+        </div>
+        <button id="tweet-btn" class="btn">Tweet</button>
       </section>
 
-      <section id="login">
-        <h2>Login</h2>
-        <form id="loginForm">
-          <input type="email" id="loginEmail" placeholder="Email" required />
-          <input
-            type="password"
-            id="loginPassword"
-            placeholder="Password"
-            required
-          />
-          <button type="submit">Login</button>
-        </form>
+      <section id="tweet-feed" class="tweet-feed">
+        <!-- Where Firebase data gets rendered -->
       </section>
     </main>
   </body>

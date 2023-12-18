@@ -1,21 +1,22 @@
 import { v4 as uuidv4 } from "https://jspm.dev/uuid";
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import {
-  getDatabase,
   ref,
   push,
   onValue,
   get,
   set,
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { auth, database } from "./firebase-config.js";
 
-// Firebase setup
-const appSettings = {
-  databaseURL: "https://twimba-f025b-default-rtdb.firebaseio.com/",
-};
-const app = initializeApp(appSettings);
-const database = getDatabase(app);
+// Firebase Database setup
+
 const tweetsRef = ref(database, "tweets");
+
+onAuthStateChanged(auth, (user) => {
+  if (!user && window.location.pathname === "/app.html") {
+    window.location.href = "index.html";
+  }
+});
 
 // Runs on changes to Firebase DB "tweets" ref
 onValue(tweetsRef, (snapshot) => {
