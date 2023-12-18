@@ -5,7 +5,7 @@ import {
   onValue,
   get,
   set,
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+} from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 import {
   onAuthStateChanged,
   signOut,
@@ -16,16 +16,15 @@ import { auth, database } from "./firebase-config.js";
 
 const tweetsRef = ref(database, "tweets");
 
-const redirectToLogin = () => (window.location.href = "index.html");
+const redirectToLogin = () => (window.location.href = "../index.html");
 
 onAuthStateChanged(auth, (user) => {
-  if (!user && window.location.pathname === "/app.html") {
+  if (!user) {
     redirectToLogin();
   }
 });
 
-const handleLogout = () => auth.signOut();
-document.querySelector("#sign-out-btn").addEventListener("click", handleLogout);
+const handleLogout = () => signOut(auth);
 
 // Runs on changes to Firebase DB "tweets" ref
 onValue(tweetsRef, (snapshot) => {
@@ -140,6 +139,9 @@ document.addEventListener("click", (e) => {
     handleTweetBtnClick();
   } else if (e.target.dataset.replyBtn) {
     handleReplyBtnClick(e.target.dataset.replyBtn);
+  } else if (e.target.id === "sign-out-btn") {
+    console.log("clicked");
+    handleLogout();
   }
 });
 
@@ -249,7 +251,7 @@ const handleTweetBtnClick = () => {
   if (tweetInput.value) {
     push(tweetsRef, {
       handle: `@ScrimbaStudent`,
-      profilePic: `images/scrimbalogo.png`,
+      profilePic: `../images/scrimbalogo.png`,
       likes: 0,
       retweets: 0,
       tweetText: tweetInput.value,

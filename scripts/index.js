@@ -4,7 +4,7 @@ import {
   signInWithEmailAndPassword,
 } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
-const redirectToApp = () => (window.location.href = "app.html");
+const redirectToApp = () => (window.location.href = "html/app.html");
 
 document.addEventListener("submit", (e) => {
   e.preventDefault();
