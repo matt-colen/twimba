@@ -6,17 +6,26 @@ import {
   get,
   set,
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import {
+  onAuthStateChanged,
+  signOut,
+} from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 import { auth, database } from "./firebase-config.js";
 
 // Firebase Database setup
 
 const tweetsRef = ref(database, "tweets");
 
+const redirectToLogin = () => (window.location.href = "index.html");
+
 onAuthStateChanged(auth, (user) => {
   if (!user && window.location.pathname === "/app.html") {
-    window.location.href = "index.html";
+    redirectToLogin();
   }
 });
+
+const handleLogout = () => auth.signOut();
+document.querySelector("#sign-out-btn").addEventListener("click", handleLogout);
 
 // Runs on changes to Firebase DB "tweets" ref
 onValue(tweetsRef, (snapshot) => {
