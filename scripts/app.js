@@ -11,8 +11,6 @@ import {
 } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 import { auth, database } from "./firebase-config.js";
 
-// Firebase Database setup
-
 const tweetsRef = ref(database, "tweets");
 
 const redirectToLogin = () => (window.location.href = "../index.html");
@@ -42,17 +40,14 @@ const render = (data) => {
 const getFeedHTML = (jsonData) => {
   let tweets = Object.entries(jsonData).reverse();
   let feedHTML = ``;
+  const currentUser = auth.currentUser.uid;
 
   tweets.forEach((tweet) => {
     const tweetVal = tweet[1];
     const replies = JSON.parse(tweetVal.replies);
     let repliesHTML = getRepliesHTML(tweetVal, replies);
-    const isLiked = JSON.parse(
-      tweetVal.likedBy.includes(localStorage.getItem("user-id"))
-    );
-    const isRetweeted = JSON.parse(
-      tweetVal.retweetedBy.includes(localStorage.getItem("user-id"))
-    );
+    const isLiked = JSON.parse(tweetVal.likedBy.includes(currentUser));
+    const isRetweeted = JSON.parse(tweetVal.retweetedBy.includes(currentUser));
 
     feedHTML += `
     <div class="tweet" id="${tweet[0]}">
@@ -151,9 +146,10 @@ const handleReplyBtnClick = async (tweetId) => {
 
   if (replyText) {
     const replyObj = {
-      handle: `@ScrimbaStudent`,
+      handle: `@${auth.currentUser.displayName}`,
       profilePic: `../images/scrimbalogo.png`,
       tweetText: replyText,
+      createdBy: `${auth.currentUser.uid}`,
     };
 
     if (snapshot.exists()) {
@@ -249,7 +245,7 @@ const handleTweetBtnClick = () => {
 
   if (tweetInput.value) {
     push(tweetsRef, {
-      handle: `@ScrimbaStudent`,
+      handle: `@${auth.currentUser.displayName}`,
       profilePic: `../images/scrimbalogo.png`,
       likes: 0,
       retweets: 0,
