@@ -9,24 +9,20 @@ const redirectToApp = () => (window.location.href = "../html/app.html");
 
 document.addEventListener("submit", (e) => {
   e.preventDefault();
-
-  if (e.target.id === "registerForm") {
-    handleRegistration(e);
-  } else if (e.target.id === "loginForm") {
-    handleLogin(e);
-  }
+  e.target.id === "registerForm" ? handleRegistration() : handleLogin();
 });
 
-const handleRegistration = async (e) => {
+const handleRegistration = async () => {
+  const username = document.querySelector("#registerUsername").value;
   const email = document.querySelector("#registerEmail").value;
   const password = document.querySelector("#registerPassword").value;
-  const username = document.querySelector("#registerUsername").value;
 
   const userCredential = await createUserWithEmailAndPassword(
     auth,
     email,
     password
   );
+
   const user = userCredential.user;
 
   // Updates user profile with username
@@ -37,7 +33,7 @@ const handleRegistration = async (e) => {
   redirectToApp();
 };
 
-const handleLogin = async (e) => {
+const handleLogin = async () => {
   const email = document.querySelector("#loginEmail").value;
   const password = document.querySelector("#loginPassword").value;
 

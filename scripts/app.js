@@ -100,7 +100,7 @@ const getFeedHTML = (jsonData) => {
   return feedHTML;
 };
 
-const getRepliesHTML = (tweet, replies) => {
+const getRepliesHTML = (replies) => {
   let repliesHTML = "";
 
   if (replies.length > 0) {
@@ -134,7 +134,6 @@ document.addEventListener("click", (e) => {
   } else if (e.target.dataset.replyBtn) {
     handleReplyBtnClick(e.target.dataset.replyBtn);
   } else if (e.target.id === "sign-out-btn") {
-    console.log("clicked");
     handleLogout();
   }
 });
