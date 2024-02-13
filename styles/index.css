@@ -36,6 +36,10 @@
   display: flex;
 }
 
+.error {
+  color: red;
+}
+
 html {
   box-sizing: border-box;
 }
@@ -58,7 +62,7 @@ body {
 }
 
 .title {
-  margin: var(--spacing-l) 0 0 0;
+  margin: var(--spacing-l) 0;
   font-size: var(--font-size-l);
   color: var(--color-primary);
 }
@@ -68,6 +72,7 @@ body {
   border-radius: var(--radius-soft);
   padding: var(--spacing-m);
   background: var(--color-bg-light);
+  text-align: center;
 }
 
 .tweet-icon {
@@ -122,6 +127,7 @@ header a:first-child {
 .tweet-textarea,
 .reply-text {
   border: none;
+  border-radius: var(--radius-soft);
   resize: none;
   padding: var(--spacing-s);
   margin: 0 0 var(--spacing-l) 0;
@@ -133,6 +139,16 @@ header a:first-child {
 .reply-text {
   border: 1px solid var(--color-tweet-border);
   border-radius: 4px;
+}
+
+button:disabled {
+  background: var(--color-icon-default);
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
+button:disabled:hover {
+  background: var(--color-icon-default);
 }
 
 .btn {
@@ -218,9 +234,6 @@ header a:first-child {
   main {
     margin: 0 var(--spacing-m);
   }
-  .status-message {
-    text-align: center;
-  }
   .btn {
     width: 100%;
   }
@@ -232,4 +245,8 @@ header a:first-child {
     display: flex;
     align-items: center;
   }
+}
+
+.highlight {
+  border: 2px solid red;
 }

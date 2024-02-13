@@ -19,9 +19,21 @@ onAuthStateChanged(auth, (user) => {
   if (user) {
     document.querySelector("#sign-out-btn").classList.remove("hidden");
     currentUser = user;
+    document
+      .querySelectorAll("button")
+      .forEach((button) => (button.disabled = false));
+    document
+      .querySelectorAll("textarea")
+      .forEach((textarea) => (textarea.disabled = false));
   } else {
     document.querySelector("#sign-out-btn").classList.add("hidden");
     currentUser = null;
+    document
+      .querySelectorAll("button")
+      .forEach((button) => (button.disabled = true));
+    document
+      .querySelectorAll("textarea")
+      .forEach((textarea) => (textarea.disabled = true));
   }
   getWelcomeMessage(user);
 });
@@ -66,7 +78,6 @@ const getFeedHTML = (jsonData) => {
     const tweetVal = tweet[1];
     const replies = JSON.parse(tweetVal.replies);
     let repliesHTML = getRepliesHTML(replies);
-    console.log(currentUser);
     const isLiked = JSON.parse(tweetVal.likedBy.includes(currentUserID));
     const isRetweeted = JSON.parse(
       tweetVal.retweetedBy.includes(currentUserID)
@@ -109,6 +120,7 @@ const getFeedHTML = (jsonData) => {
           
           <div class="reply-input__container">
             <textarea class="reply-text" type="text" placeholder="Add a reply"></textarea>
+            <p id="reply-error" class="reply-error error hidden">Please enter a reply</p>
             <button id="reply-btn" class="btn btn--primary" data-reply-btn="${
               tweet[0]
             }">Reply</button>
@@ -144,31 +156,35 @@ const getRepliesHTML = (replies) => {
 };
 
 document.addEventListener("click", (e) => {
-  if (e.target.dataset.like) {
-    handleLikeClick(e.target.dataset.like);
-  } else if (e.target.dataset.retweet) {
-    handleRetweetClick(e.target.dataset.retweet);
-  } else if (e.target.dataset.reply) {
+  if (currentUser) {
+    if (e.target.dataset.like) {
+      handleLikeClick(e.target.dataset.like);
+    } else if (e.target.dataset.retweet) {
+      handleRetweetClick(e.target.dataset.retweet);
+    } else if (e.target.id === "tweet-btn") {
+      handleTweetBtnClick();
+    } else if (e.target.dataset.replyBtn) {
+      handleReplyBtnClick(e.target.dataset.replyBtn);
+    } else if (e.target.id === "sign-out-btn") {
+      handleLogout();
+    }
+  }
+  if (e.target.dataset.reply) {
     handleReplyClick(e.target.dataset.reply);
-  } else if (e.target.id === "tweet-btn") {
-    handleTweetBtnClick();
-  } else if (e.target.dataset.replyBtn) {
-    handleReplyBtnClick(e.target.dataset.replyBtn);
-  } else if (e.target.id === "sign-out-btn") {
-    handleLogout();
   }
 });
 
 const handleReplyBtnClick = async (tweetId) => {
   const tweetRef = ref(database, `tweets/${tweetId}`);
   const snapshot = await get(tweetRef);
-  const replyText = document.querySelector(`#${tweetId} textarea`).value;
+  const replyText = document.querySelector(`#${tweetId} textarea`);
+  const replyError = document.querySelector("#reply-error");
 
-  if (replyText) {
+  if (replyText.value) {
     const replyObj = {
       handle: `@${auth.currentUser.displayName}`,
       profilePic: `../images/scrimbalogo.png`,
-      tweetText: replyText,
+      tweetText: replyText.value,
       createdBy: `${auth.currentUser.uid}`,
     };
 
@@ -190,6 +206,12 @@ const handleReplyBtnClick = async (tweetId) => {
       data.replies = JSON.stringify(repliesArray);
       await set(tweetRef, data);
     }
+
+    replyText.classList.remove("highlight");
+    replyError.classList.add("hidden");
+  } else {
+    highlightInputField(replyText);
+    replyError.classList.remove("hidden");
   }
 };
 
@@ -262,6 +284,7 @@ const handleReplyClick = (replyId) =>
 
 const handleTweetBtnClick = () => {
   const tweetInput = document.getElementById("tweet-textarea");
+  const messageError = document.querySelector("#message-error");
 
   if (tweetInput.value) {
     push(tweetsRef, {
@@ -276,5 +299,14 @@ const handleTweetBtnClick = () => {
       createdBy: `${auth.currentUser.uid}`,
     });
     tweetInput.value = "";
+    tweetInput.classList.remove("highlight");
+    messageError.classList.add("hidden");
+  } else {
+    highlightInputField(tweetInput);
+    messageError.classList.remove("hidden");
   }
+};
+
+const highlightInputField = (field) => {
+  field.classList.add("highlight");
 };

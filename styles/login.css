@@ -15,6 +15,18 @@ ul {
 }
 
 a {
+  display: inline-block;
+  margin: var(--spacing-l) 0;
+}
+
+.password-link {
+  margin: 0 0 var(--spacing-l) 0;
+}
+
+.create-link {
+  margin-top: var(--spacing-xl);
+}
+
+.link-block {
   display: block;
-  margin: var(--spacing-xl) 0;
 }
