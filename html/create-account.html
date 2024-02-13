@@ -24,15 +24,17 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css"
     />
-    <link rel="stylesheet" href="../styles/app.css" />
+    <link rel="stylesheet" href="../styles/login.css" />
     <link rel="stylesheet" href="../styles/index.css" />
     <!-- Scripts  -->
-    <script src="../scripts/index.js" type="module" defer></script>
+    <script src="../scripts/login.js" type="module" defer></script>
   </head>
 
   <body>
     <header>
-      <h1 class="title">Twimba</h1>
+      <a class="title-link" href="../index.html">
+        <h1 class="title">Twimba</h1>
+      </a>
     </header>
 
     <main>
@@ -55,7 +57,7 @@
           </ul>
           <button class="btn btn--primary" type="submit">Create Account</button>
         </form>
-        <a href="../index.html">Log In</a>
+        <p>Already have an account? <a href="login.html">Log In</a></p>
       </section>
     </main>
   </body>

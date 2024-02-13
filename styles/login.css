@@ -1,0 +1,20 @@
+input {
+  display: block;
+  width: 100%;
+  padding: var(--spacing-s);
+  margin: 0 0 var(--spacing-l) 0;
+}
+
+form {
+  max-width: 400px;
+}
+
+ul {
+  padding: 0;
+  list-style-type: none;
+}
+
+a {
+  display: block;
+  margin: var(--spacing-xl) 0;
+}
