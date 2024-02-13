@@ -1,20 +1,232 @@
-input {
-  display: block;
-  width: 100%;
+:root {
+  /* Colors */
+  --color-primary: hsl(204, 87%, 47%);
+  --color-primary-hover: hsl(204, 97%, 37%);
+  --color-secondary: #555;
+  --color-icon-default: #999;
+  --color-icon-liked: red;
+  --color-icon-retweeted: limegreen;
+  --color-tweet-border: lightgray;
+  /* Spacing  */
+  --spacing-xs: 4px;
+  --spacing-s: 10px;
+  --spacing-m: 15px;
+  --spacing-l: 20px;
+  --spacing-xl: 40px;
+  /* Font Size  */
+  --font-size-xxs: 12px;
+  --font-size-xs: 15px;
+  --font-size-s: 18px;
+  --font-size-m: 20px;
+  --font-size-l: 28px;
+  /* Radius  */
+  --radius-circle: 50%;
+  /* Transitions  */
+  --transition-quick: all 0.1s;
+}
+
+/* Utility */
+.hidden {
+  display: none;
+}
+
+.flex {
+  display: flex;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+body {
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+  font-size: var(--font-size-m);
+}
+
+/* Typography & Icons */
+.title-link {
+  text-decoration: none;
+}
+
+.title {
+  margin: var(--spacing-l) 0 0 0;
+  font-size: var(--font-size-l);
+  color: var(--color-primary);
+}
+
+.status-message {
+  margin-bottom: var(--spacing-xl);
+  background: var(--color-tweet-border);
+  padding: var(--spacing-m);
+}
+
+.tweet-icon {
+  font-size: var(--font-size-s);
+  cursor: pointer;
+}
+
+.fa-solid {
+  color: var(--color-icon-default);
+}
+
+.liked {
+  color: var(--color-icon-liked);
+}
+
+.retweeted {
+  color: var(--color-icon-retweeted);
+}
+
+/* layout */
+main,
+header {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+header {
+  padding-bottom: var(--spacing-l);
+  align-items: center;
+  justify-content: end;
+}
+
+header a:first-child {
+  margin-right: auto;
+}
+
+/* Tweet input section  */
+.tweet-input__container {
+  align-items: flex-start;
+  gap: var(--spacing-s);
+}
+
+/* Tweet feed section  */
+.tweet-feed {
+  margin: var(--spacing-xl) 0;
+}
+
+.reply-input__container {
+  margin: var(--spacing-l) 0 0 var(--spacing-xl);
+}
+
+.tweet-textarea,
+.reply-text {
+  border: none;
+  resize: none;
   padding: var(--spacing-s);
   margin: 0 0 var(--spacing-l) 0;
+  height: 100px;
+  width: 100%;
+  line-height: 30px;
 }
 
-form {
-  max-width: 400px;
+.reply-text {
+  border: 1px solid var(--color-tweet-border);
+  border-radius: 4px;
 }
 
-ul {
-  padding: 0;
-  list-style-type: none;
+.btn {
+  background: none;
+  border-radius: 100px;
+  padding: var(--spacing-s);
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-quick);
 }
 
-a {
-  display: block;
-  margin: var(--spacing-xl) 0;
+.btn--primary {
+  color: white;
+  background-color: var(--color-primary);
+  padding: var(--spacing-s) var(--spacing-xl);
+  font-size: var(--font-size-m);
+  min-width: 160px;
+}
+
+.btn--primary:hover {
+  background: var(--color-primary-hover);
+}
+
+.btn--secondary {
+  font-size: var(--font-size-s);
+  max-width: 100px;
+}
+
+.btn--secondary:hover {
+  background: var(--color-tweet-border);
+}
+
+/* Tweet */
+.tweet {
+  border-top: 1px solid var(--color-tweet-border);
+  padding: var(--spacing-m) 0;
+  width: 100%;
+  margin: 0;
+}
+
+.tweet-inner {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-s);
+}
+
+.tweet-details {
+  display: flex;
+  font-size: var(--font-size-xs);
+  justify-content: flex-start;
+  gap: var(--spacing-l);
+}
+
+.tweet-detail {
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+.tweet-reply {
+  border-top: 1px solid var(--color-tweet-border);
+  padding: var(--spacing-l) 0 0 0px;
+  margin: var(--spacing-s) 0 var(--spacing-s) var(--spacing-xl);
+}
+
+.handle {
+  font-size: var(--font-size-xxs);
+  font-weight: 500;
+  color: var(--color-secondary);
+  margin-top: 0;
+}
+
+/* Images */
+.profile-pic {
+  border: 1px solid var(--color-tweet-border);
+  border-radius: var(--radius-circle);
+  width: 48px;
+}
+
+/* Media Queries  */
+@media only screen and (max-width: 600px) {
+  header,
+  main {
+    margin: 0 var(--spacing-m);
+  }
+  .status-message {
+    text-align: center;
+  }
+  .btn {
+    width: 100%;
+  }
+  .tweet-icon,
+  .tweet-detail {
+    font-size: 22px;
+  }
+  .tweet-detail {
+    display: flex;
+    align-items: center;
+  }
 }
