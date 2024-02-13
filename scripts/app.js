@@ -45,7 +45,7 @@ const getFeedHTML = (jsonData) => {
   tweets.forEach((tweet) => {
     const tweetVal = tweet[1];
     const replies = JSON.parse(tweetVal.replies);
-    let repliesHTML = getRepliesHTML(tweetVal, replies);
+    let repliesHTML = getRepliesHTML(replies);
     const isLiked = JSON.parse(tweetVal.likedBy.includes(currentUser));
     const isRetweeted = JSON.parse(tweetVal.retweetedBy.includes(currentUser));
 
@@ -102,7 +102,6 @@ const getFeedHTML = (jsonData) => {
 
 const getRepliesHTML = (replies) => {
   let repliesHTML = "";
-
   if (replies.length > 0) {
     replies.forEach((reply) => {
       repliesHTML += `
@@ -118,7 +117,6 @@ const getRepliesHTML = (replies) => {
       `;
     });
   }
-
   return repliesHTML;
 };
 
