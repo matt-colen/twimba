@@ -3,6 +3,7 @@
   --color-primary: hsl(204, 87%, 47%);
   --color-primary-hover: hsl(204, 97%, 37%);
   --color-secondary: #555;
+  --color-bg-light: #e3e3e3;
   --color-icon-default: #999;
   --color-icon-liked: red;
   --color-icon-retweeted: limegreen;
@@ -20,6 +21,7 @@
   --font-size-m: 20px;
   --font-size-l: 28px;
   /* Radius  */
+  --radius-soft: 4px;
   --radius-circle: 50%;
   /* Transitions  */
   --transition-quick: all 0.1s;
@@ -63,8 +65,9 @@ body {
 
 .status-message {
   margin-bottom: var(--spacing-xl);
-  background: var(--color-tweet-border);
+  border-radius: var(--radius-soft);
   padding: var(--spacing-m);
+  background: var(--color-bg-light);
 }
 
 .tweet-icon {
